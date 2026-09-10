@@ -1,0 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap');
+
+@import "tailwindcss";
+
+:root {
+  --primary: #c8956c;
+  --primary-dark: #a67c52;
+  --dark-1: #1a2332;
+  --dark-2: #0f1923;
+  --background: #f8f7f4;
+  --card: #ffffff;
+  --border: #e8e6e1;
+  --text-primary: #1a1a1a;
+  --text-secondary: #888888;
+  --text-muted: #aaaaaa;
+  --font-sans: 'Geist', system-ui, sans-serif;
+  --font-mono: 'Geist Mono', 'JetBrains Mono', monospace;
+}
+
+body {
+  background: var(--background);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-feature-settings: 'ss01' 1, 'ss02' 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Headings — tighter tracking looks great with Geist */
+h1, h2, h3, h4 {
+  letter-spacing: -0.025em;
+}
+
+code, pre, kbd, samp {
+  font-family: var(--font-mono);
+}
+
+* { box-sizing: border-box; }
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #e8e6e1; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #c8956c; }
