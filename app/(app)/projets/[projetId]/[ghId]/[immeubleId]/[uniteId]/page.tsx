@@ -10,6 +10,8 @@ import { LoadingSpinner } from "@/components/shared/LoadingSpinner";
 import { UniteFormDialog } from "@/components/shared/UniteFormDialog";
 import { formatMAD, formatDate, getPrixParM2, getInitials } from "@/lib/utils";
 import type { Unite } from "@/lib/types";
+import { getCurrentRole } from "@/lib/role-store";
+import { ROLE_PERMISSIONS } from "@/lib/roles";
 
 const HISTORY_ICONS: Record<string, string> = {
   CREATION: "🏗️", OPTION: "🤝", RESERVATION: "📋", COMPROMIS: "✍️",
@@ -21,6 +23,8 @@ export default function UnitePage() {
   const { projetId, ghId, immeubleId, uniteId } = useParams<{
     projetId: string; ghId: string; immeubleId: string; uniteId: string;
   }>();
+  const [role] = useState(getCurrentRole);
+  const perms = ROLE_PERMISSIONS[role];
   const [unite, setUnite] = useState<UniteDetail | null>(null);
   const [immeubleData, setImmeubleData] = useState<ImmeubleWithUnites | null>(null);
   const [loading, setLoading] = useState(true);
@@ -86,13 +90,15 @@ export default function UnitePage() {
                   <h1 className="text-2xl font-bold">
                     Unité {unite.numero}
                   </h1>
-                  <button
-                    onClick={() => setEditOpen(true)}
-                    className="rounded-lg border border-[#e8e6e1] p-1.5 text-[#aaaaaa] hover:text-[#1a1a1a] hover:border-[#c8956c]/40 transition-colors"
-                    title="Modifier l'unité"
-                  >
-                    <Pencil className="h-3.5 w-3.5" />
-                  </button>
+                  {perms.canEditUnite && (
+                    <button
+                      onClick={() => setEditOpen(true)}
+                      className="rounded-lg border border-[#e8e6e1] p-1.5 text-[#aaaaaa] hover:text-[#1a1a1a] hover:border-[#c8956c]/40 transition-colors"
+                      title="Modifier l'unité"
+                    >
+                      <Pencil className="h-3.5 w-3.5" />
+                    </button>
+                  )}
                   <StatutBadge statut={unite.statut} />
                 </div>
                 <p className="text-sm font-mono text-[#888888]">{unite.reference}</p>

@@ -2,16 +2,20 @@
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { ChevronRight, Home, Pencil, Plus } from "lucide-react";
+import { ChevronRight, Home, Pencil, Plus, Lock } from "lucide-react";
 import { LoadingSpinner } from "@/components/shared/LoadingSpinner";
 import { fetchGH, type GHWithImmeubles } from "@/lib/supabase/db";
 import { GHFormDialog } from "@/components/shared/GHFormDialog";
 import { ImmeubleFormDialog } from "@/components/shared/ImmeubleFormDialog";
 import { STATUTS_UNITE } from "@/lib/constants";
 import { type StatutUnite, type Immeuble } from "@/lib/types";
+import { getCurrentRole } from "@/lib/role-store";
+import { ROLE_PERMISSIONS } from "@/lib/roles";
 
 export default function GHPage() {
   const { projetId, ghId } = useParams<{ projetId: string; ghId: string }>();
+  const [role] = useState(getCurrentRole);
+  const perms = ROLE_PERMISSIONS[role];
   const [gh, setGH] = useState<GHWithImmeubles | null>(null);
   const [loading, setLoading] = useState(true);
   const [editOpen, setEditOpen] = useState(false);
@@ -47,13 +51,15 @@ export default function GHPage() {
           <p className="text-sm text-[#888888]">{projet?.nom} · {gh.immeubles.length} immeubles</p>
           {gh.description && <p className="text-sm text-[#888888] mt-0.5">{gh.description}</p>}
         </div>
-        <button
-          onClick={() => setEditOpen(true)}
-          className="flex items-center gap-1.5 rounded-lg border border-[#e8e6e1] bg-white px-3 py-2 text-xs font-medium text-[#888888] hover:text-[#1a1a1a] hover:border-[#c8956c]/40 transition-colors"
-        >
-          <Pencil className="h-3.5 w-3.5" />
-          Modifier
-        </button>
+        {perms.canEditProject && (
+          <button
+            onClick={() => setEditOpen(true)}
+            className="flex items-center gap-1.5 rounded-lg border border-[#e8e6e1] bg-white px-3 py-2 text-xs font-medium text-[#888888] hover:text-[#1a1a1a] hover:border-[#c8956c]/40 transition-colors"
+          >
+            <Pencil className="h-3.5 w-3.5" />
+            Modifier
+          </button>
+        )}
       </div>
 
       {/* Edit GH dialog */}
@@ -79,6 +85,12 @@ export default function GHPage() {
 
       <div className="flex items-center justify-between mb-2">
         <p className="text-sm font-medium text-[#888888]">{gh.immeubles.length} immeuble{gh.immeubles.length !== 1 ? "s" : ""}</p>
+        {!perms.canCreateProject ? (
+          <div className="flex items-center gap-1.5 text-xs text-[#aaaaaa] bg-stone-100 rounded-lg px-3 py-2">
+            <Lock className="h-3.5 w-3.5" />
+            Création non autorisée
+          </div>
+        ) : (
         <button
           onClick={() => setImmeubleDialogOpen(true)}
           className="flex items-center gap-1.5 rounded-lg bg-[#c8956c] px-3 py-2 text-xs font-semibold text-white hover:bg-[#a67c52] transition-colors"
@@ -86,6 +98,7 @@ export default function GHPage() {
           <Plus className="h-3.5 w-3.5" />
           Nouvel immeuble
         </button>
+        )}
       </div>
 
       <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">

@@ -99,13 +99,15 @@ export default function ImmeubleUnites() {
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-2xl font-bold">{immeuble.nom}</h1>
-            <button
-              onClick={() => setEditImmeubleOpen(true)}
-              className="rounded-lg border border-[#e8e6e1] p-1.5 text-[#aaaaaa] hover:text-[#1a1a1a] hover:border-[#c8956c]/40 transition-colors"
-              title="Modifier l'immeuble"
-            >
-              <Pencil className="h-3.5 w-3.5" />
-            </button>
+            {perms.canEditProject && (
+              <button
+                onClick={() => setEditImmeubleOpen(true)}
+                className="rounded-lg border border-[#e8e6e1] p-1.5 text-[#aaaaaa] hover:text-[#1a1a1a] hover:border-[#c8956c]/40 transition-colors"
+                title="Modifier l'immeuble"
+              >
+                <Pencil className="h-3.5 w-3.5" />
+              </button>
+            )}
           </div>
           <p className="text-sm text-[#888888]">{gh?.nom} · {immeuble.nb_etages} étages · {allUnites.length} unités</p>
         </div>
