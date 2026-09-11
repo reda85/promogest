@@ -9,6 +9,7 @@ import type {
   DossierNotaire, DocumentDossier, Notaire, HistoriqueUnite,
   StatutUnite, StatutNotaire,
   Tache, TypeTache, PrioriteTache,
+  Paiement, TypePaiement,
 } from "@/lib/types";
 
 export function getDB() {
@@ -462,7 +463,26 @@ export async function createReservation(payload: {
     .select()
     .single();
   if (error) throw error;
-  return data as unknown as Reservation;
+  const reservation = data as unknown as Reservation;
+
+  // Seed the initial payment ledger entry from the avance captured at booking
+  // (best-effort — the reservation itself is already saved either way).
+  if (payload.montant_avance && payload.montant_avance > 0) {
+    try {
+      await getDB().from("paiements").insert({
+        reservation_id: reservation.id,
+        type: "AVANCE" as TypePaiement,
+        montant: payload.montant_avance,
+        date_paiement: payload.date_reservation,
+        mode_paiement: payload.mode_versement_avance || payload.mode_paiement,
+        reference: payload.numero_cheque,
+      });
+    } catch {
+      // ignore — the payment can be logged manually from the reservation page
+    }
+  }
+
+  return reservation;
 }
 
 export async function updateUniteStatut(uniteId: string, statut: StatutUnite): Promise<void> {
@@ -698,5 +718,150 @@ export async function toggleTache(id: string, terminee: boolean): Promise<void> 
 
 export async function deleteTache(id: string): Promise<void> {
   const { error } = await getDB().from("taches").delete().eq("id", id);
+  if (error) throw error;
+}
+
+// ─── Recherche globale ────────────────────────────────────────────────────────
+
+export type SearchResultType = "client" | "projet" | "unite" | "tache" | "notaire";
+
+export interface SearchResult {
+  type:      SearchResultType;
+  id:        string;
+  label:     string;
+  sublabel?: string;
+  href:      string;
+}
+
+/**
+ * Recherche transversale (barre du haut) : clients, projets, unités, tâches,
+ * notaires. Chaque catégorie est limitée pour garder la réponse légère.
+ */
+export async function globalSearch(query: string): Promise<SearchResult[]> {
+  const term = query.replace(/[,()*%]/g, " ").trim();
+  if (term.length < 2) return [];
+  const db = getDB();
+  const w = `*${term}*`;
+
+  const [clients, projets, unites, taches, notaires] = await Promise.all([
+    db.from("clients")
+      .select("id, prenom, nom, cin, ville")
+      .or(`prenom.ilike.${w},nom.ilike.${w},cin.ilike.${w},telephone.ilike.${w},email.ilike.${w}`)
+      .limit(6),
+    db.from("projets")
+      .select("id, nom, ville, quartier")
+      .or(`nom.ilike.${w},ville.ilike.${w},quartier.ilike.${w}`)
+      .limit(5),
+    db.from("unites")
+      .select("id, reference, numero, type, projet_id, gh_id, immeuble_id")
+      .or(`reference.ilike.${w},numero.ilike.${w}`)
+      .limit(6),
+    db.from("taches")
+      .select("id, titre, type, terminee")
+      .ilike("titre", `%${term}%`)
+      .limit(5),
+    db.from("notaires")
+      .select("id, nom, ville")
+      .or(`nom.ilike.${w},ville.ilike.${w}`)
+      .limit(4),
+  ]);
+
+  const out: SearchResult[] = [];
+
+  for (const c of (clients.data ?? []) as Record<string, string>[]) {
+    out.push({
+      type: "client",
+      id: c.id,
+      label: `${c.prenom} ${c.nom}`,
+      sublabel: [c.cin, c.ville].filter(Boolean).join(" · "),
+      href: `/clients/${c.id}`,
+    });
+  }
+  for (const p of (projets.data ?? []) as Record<string, string>[]) {
+    out.push({
+      type: "projet",
+      id: p.id,
+      label: p.nom,
+      sublabel: [p.quartier, p.ville].filter(Boolean).join(", "),
+      href: `/projets/${p.id}`,
+    });
+  }
+  for (const u of (unites.data ?? []) as Record<string, string>[]) {
+    out.push({
+      type: "unite",
+      id: u.id,
+      label: `Unité ${u.numero}${u.reference ? ` — ${u.reference}` : ""}`,
+      sublabel: u.type,
+      href: `/projets/${u.projet_id}/${u.gh_id}/${u.immeuble_id}/${u.id}`,
+    });
+  }
+  for (const t of (taches.data ?? []) as Record<string, unknown>[]) {
+    out.push({
+      type: "tache",
+      id: t.id as string,
+      label: t.titre as string,
+      sublabel: t.terminee ? "Terminée" : "À faire",
+      href: `/taches`,
+    });
+  }
+  for (const n of (notaires.data ?? []) as Record<string, string>[]) {
+    out.push({
+      type: "notaire",
+      id: n.id,
+      label: n.nom,
+      sublabel: n.ville,
+      href: `/notaire/notaires`,
+    });
+  }
+
+  return out;
+}
+
+// ─── Paiements ────────────────────────────────────────────────────────────────
+
+/** Historique des paiements d'une réservation, du plus récent au plus ancien. */
+export async function fetchPaiements(reservationId: string): Promise<Paiement[]> {
+  const { data, error } = await getDB()
+    .from("paiements")
+    .select("*")
+    .eq("reservation_id", reservationId)
+    .order("date_paiement", { ascending: false })
+    .order("created_at", { ascending: false });
+  if (error) return [];
+  return (data ?? []) as unknown as Paiement[];
+}
+
+/**
+ * Version allégée : { reservation_id, montant } de tous les paiements —
+ * pour calculer le total payé par réservation (gate de la transition VENDU).
+ */
+export async function fetchPaiementsTotals(): Promise<{ reservation_id: string; montant: number }[]> {
+  const { data, error } = await getDB()
+    .from("paiements")
+    .select("reservation_id, montant");
+  if (error) return [];
+  return (data ?? []) as unknown as { reservation_id: string; montant: number }[];
+}
+
+export async function createPaiement(payload: {
+  reservation_id: string;
+  type: TypePaiement;
+  montant: number;
+  date_paiement: string;
+  mode_paiement?: string;
+  reference?: string;
+  notes?: string;
+}): Promise<Paiement> {
+  const { data, error } = await getDB()
+    .from("paiements")
+    .insert(payload)
+    .select()
+    .single();
+  if (error) throw error;
+  return data as unknown as Paiement;
+}
+
+export async function deletePaiement(id: string): Promise<void> {
+  const { error } = await getDB().from("paiements").delete().eq("id", id);
   if (error) throw error;
 }

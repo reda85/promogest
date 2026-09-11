@@ -3,6 +3,7 @@ export type StatutNotaire = "EN_PREPARATION" | "ENVOYE" | "EN_ATTENTE_SIGNATURE"
 export type RoleUser = "admin" | "commercial" | "viewer";
 export type TypeTache = "APPEL" | "RDV" | "RELANCE" | "EMAIL" | "VISITE" | "DOCUMENT" | "AUTRE";
 export type PrioriteTache = "BASSE" | "NORMALE" | "HAUTE";
+export type TypePaiement = "AVANCE" | "MENSUALITE" | "VERSEMENT" | "SOLDE_FINAL" | "AUTRE";
 
 export interface Organisation {
   id: string;
@@ -153,6 +154,18 @@ export interface Tache {
   client?: Client;
   reservation?: Reservation;
   projet?: Projet;
+}
+
+export interface Paiement {
+  id: string;
+  reservation_id: string;
+  type: TypePaiement;
+  montant: number;
+  date_paiement: string;
+  mode_paiement?: string;
+  reference?: string;
+  notes?: string;
+  created_at: string;
 }
 
 export interface Notaire {

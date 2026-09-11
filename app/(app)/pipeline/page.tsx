@@ -1,12 +1,17 @@
 "use client";
 import { useState, useCallback, useEffect } from "react";
 import { DragDropContext, Droppable, Draggable, type DropResult, type DragStart } from "@hello-pangea/dnd";
-import { fetchReservations, fetchTachesSuivi, updateUniteStatut, updateReservationStatut, type EnrichedReservation } from "@/lib/supabase/db";
+import {
+  fetchReservations, fetchTachesSuivi, fetchPaiementsTotals,
+  updateUniteStatut, updateReservationStatut, type EnrichedReservation,
+} from "@/lib/supabase/db";
+import { getApprovedPrixExceptions } from "@/lib/exception-store";
 import { LoadingSpinner } from "@/components/shared/LoadingSpinner";
 import { TacheFormDialog } from "@/components/shared/TacheFormDialog";
 import { STATUTS_UNITE } from "@/lib/constants";
 import { getWorkflow, type WorkflowTransitions } from "@/lib/workflow-store";
 import { suiviIndicateur, SUIVI_CFG, type SuiviIndicateur } from "@/lib/taches";
+import { estIntegralementPaye, resteAPayer as computeReste } from "@/lib/paiements";
 import { formatMAD, formatDate, getInitials } from "@/lib/utils";
 import { type StatutUnite } from "@/lib/types";
 import Link from "next/link";
@@ -24,6 +29,9 @@ export default function PipelinePage() {
   const [draggingId, setDraggingId] = useState<string | null>(null);
   const [suivi, setSuivi] = useState<Record<string, SuiviIndicateur>>({});
   const [taskDialog, setTaskDialog] = useState<{ reservationId: string; clientId: string } | null>(null);
+  const [paiementsTotals, setPaiementsTotals] = useState<Record<string, number>>({});
+  const [prixExceptions, setPrixExceptions] = useState<Record<string, number>>({});
+  const [rejectMsg, setRejectMsg] = useState("Transition non autorisée");
 
   useEffect(() => {
     fetchReservations()
@@ -54,6 +62,24 @@ export default function PipelinePage() {
 
   useEffect(() => { loadSuivi(); }, [loadSuivi]);
 
+  useEffect(() => {
+    Promise.all([fetchPaiementsTotals(), getApprovedPrixExceptions()])
+      .then(([rows, excs]) => {
+        const totals: Record<string, number> = {};
+        for (const r of rows) totals[r.reservation_id] = (totals[r.reservation_id] || 0) + r.montant;
+        setPaiementsTotals(totals);
+        const pe: Record<string, number> = {};
+        for (const e of excs) pe[e.reservation_id] = e.requested_value;
+        setPrixExceptions(pe);
+      })
+      .catch(() => { setPaiementsTotals({}); setPrixExceptions({}); });
+  }, []);
+
+  /** Prix dû (après exception de prix approuvée éventuelle) pour une réservation. */
+  const prixDuFor = useCallback((card: EnrichedReservation) =>
+    prixExceptions[card.id] ?? card.unite?.prix ?? 0,
+  [prixExceptions]);
+
   const enriched = baseCards.map((r) => ({
     ...r,
     statut: statuts[r.id] ?? (r.statut as StatutUnite),
@@ -76,9 +102,24 @@ export default function PipelinePage() {
     const allowed = workflow[fromStatut] || [];
 
     if (!allowed.includes(toStatut)) {
+      setRejectMsg("Transition non autorisée");
       setRejectedCol(destination.droppableId);
       setTimeout(() => setRejectedCol(null), 900);
       return;
+    }
+
+    const card = baseCards.find((r) => r.id === draggableId);
+
+    // Ne jamais passer à VENDU tant que le prix n'est pas intégralement réglé
+    if (toStatut === "VENDU" && card) {
+      const prixDu = prixDuFor(card);
+      const paye = paiementsTotals[draggableId] ?? 0;
+      if (!estIntegralementPaye(prixDu, paye)) {
+        setRejectMsg(`Paiement incomplet — reste ${formatMAD(computeReste(prixDu, paye))}`);
+        setRejectedCol(destination.droppableId);
+        setTimeout(() => setRejectedCol(null), 1400);
+        return;
+      }
     }
 
     // Optimistic update
@@ -87,7 +128,6 @@ export default function PipelinePage() {
     setTimeout(() => setMovedId(null), 1500);
 
     // Persist to DB — draggableId is the reservation ID
-    const card = baseCards.find((r) => r.id === draggableId);
     if (card) {
       Promise.all([
         updateReservationStatut(draggableId, toStatut),
@@ -97,11 +137,19 @@ export default function PipelinePage() {
         setStatuts((prev) => ({ ...prev, [draggableId]: fromStatut }));
       });
     }
-  }, [workflow, baseCards]);
+  }, [workflow, baseCards, paiementsTotals, prixDuFor]);
 
+  const draggingCard = draggingId ? baseCards.find((r) => r.id === draggingId) : null;
+  const draggingVenteBlocked = draggingCard
+    ? !estIntegralementPaye(prixDuFor(draggingCard), paiementsTotals[draggingCard.id] ?? 0)
+    : false;
   const draggingFromStatut = draggingId ? statuts[draggingId] : null;
   const validTargets = draggingFromStatut
-    ? new Set(workflow[draggingFromStatut] || [])
+    ? new Set(
+        (workflow[draggingFromStatut] || []).filter(
+          (s) => !(s === "VENDU" && draggingVenteBlocked)
+        )
+      )
     : null;
 
   if (loading) return <LoadingSpinner label="Chargement du pipeline…" />;
@@ -193,9 +241,9 @@ export default function PipelinePage() {
                       }}
                     >
                       {isRejected && (
-                        <div className="flex items-center justify-center gap-1 py-2 text-xs text-red-600 font-medium">
-                          <Ban className="h-3.5 w-3.5" />
-                          Transition non autorisée
+                        <div className="flex items-center justify-center gap-1.5 py-2 px-2 text-center text-xs text-red-600 font-medium">
+                          <Ban className="h-3.5 w-3.5 flex-shrink-0" />
+                          {rejectMsg}
                         </div>
                       )}
 
@@ -259,13 +307,24 @@ export default function PipelinePage() {
                                   <span className="text-[10px] text-[#aaaaaa]">{formatDate(card.date_reservation)}</span>
                                 </div>
 
-                                {/* Avance */}
-                                <div className="mt-2 pt-2 border-t border-[#e8e6e1] flex justify-between items-center">
-                                  <span className="text-[10px] text-[#888888]">Avance</span>
-                                  <span className="text-[11px] font-semibold" style={{ color: cfg.color }}>
-                                    {formatMAD(card.montant_avance)}
-                                  </span>
-                                </div>
+                                {/* Paiement */}
+                                {(() => {
+                                  const prixDu = prixDuFor(card);
+                                  const paye = paiementsTotals[card.id] ?? 0;
+                                  const complet = estIntegralementPaye(prixDu, paye);
+                                  return (
+                                    <div className="mt-2 pt-2 border-t border-[#e8e6e1] flex justify-between items-center">
+                                      <span className="text-[10px] text-[#888888]">Payé</span>
+                                      <span
+                                        className="flex items-center gap-1 text-[11px] font-semibold"
+                                        style={{ color: complet ? "#10b981" : statut === "NOTAIRE" ? "#ef4444" : cfg.color }}
+                                      >
+                                        {complet && <CheckCircle2 className="h-3 w-3" />}
+                                        {formatMAD(paye)} / {formatMAD(prixDu)}
+                                      </span>
+                                    </div>
+                                  );
+                                })()}
                               </div>
                             </div>
                           )}

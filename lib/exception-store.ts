@@ -44,6 +44,22 @@ export async function getExceptionsForReservation(reservationId: string): Promis
   return (data ?? []) as unknown as ExceptionRequest[];
 }
 
+/**
+ * Version allégée : { reservation_id, requested_value } des réductions de prix
+ * approuvées — pour calculer le prix dû réel (gate de la transition VENDU).
+ */
+export async function getApprovedPrixExceptions(): Promise<
+  { reservation_id: string; requested_value: number }[]
+> {
+  const { data, error } = await getDB()
+    .from("exception_requests")
+    .select("reservation_id, requested_value")
+    .eq("type", "PRIX")
+    .eq("status", "APPROUVE");
+  if (error) return [];
+  return (data ?? []) as unknown as { reservation_id: string; requested_value: number }[];
+}
+
 /** Count of pending requests (used for the admin sidebar badge). */
 export async function getPendingCount(): Promise<number> {
   const { count, error } = await getDB()

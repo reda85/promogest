@@ -5,6 +5,7 @@ export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   const isAuthPage = pathname.startsWith("/login") || pathname.startsWith("/register");
+  const isLanding = pathname === "/";
   const isPublicAsset = /\.(svg|png|jpg|jpeg|gif|webp|ico)$/.test(pathname);
 
   if (isPublicAsset) return NextResponse.next();
@@ -22,8 +23,8 @@ export async function proxy(request: NextRequest) {
     return updateSession(request);
   }
 
-  // Mock mode: gate on cookie
-  if (!isLoggedIn && !isAuthPage) {
+  // Mock mode: gate on cookie (landing page stays public)
+  if (!isLoggedIn && !isAuthPage && !isLanding) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     return NextResponse.redirect(url);

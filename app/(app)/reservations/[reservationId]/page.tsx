@@ -4,7 +4,7 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import {
   ChevronRight, Home, CreditCard, Building2, Calendar, ArrowRight, CheckCircle,
-  TrendingDown, Clock, CheckCircle2, XCircle, Send, AlertCircle, MessageSquare,
+  TrendingDown, Clock, CheckCircle2, XCircle, Send, AlertCircle, MessageSquare, Lock,
 } from "lucide-react";
 import {
   fetchReservation, updateUniteStatut, updateReservationStatut, logHistorique, type EnrichedReservation,
@@ -14,6 +14,8 @@ import { STATUTS_UNITE } from "@/lib/constants";
 import { getWorkflow } from "@/lib/workflow-store";
 import { StatutBadge } from "@/components/shared/StatutBadge";
 import { TachesPanel } from "@/components/shared/TachesPanel";
+import { PaiementsPanel } from "@/components/shared/PaiementsPanel";
+import { resteAPayer as computeReste, estIntegralementPaye } from "@/lib/paiements";
 import { formatMAD, formatDate, getInitials } from "@/lib/utils";
 import { type StatutUnite } from "@/lib/types";
 import {
@@ -58,6 +60,9 @@ export default function ReservationDetailPage() {
   const [pendingStatut, setPendingStatut] = useState<StatutUnite | null>(null);
   const [desistementType, setDesistementType] = useState<"REMBOURSE" | "PENALITE" | null>(null);
   const [justChanged, setJustChanged] = useState(false);
+
+  // ── Paiements ─────────────────────────────────────────────────────────────
+  const [totalPaye, setTotalPaye] = useState<number | null>(null);
 
   // ── Exception state ───────────────────────────────────────────────────────
   const [exceptions, setExceptions] = useState<ExceptionRequest[]>([]);
@@ -108,6 +113,15 @@ export default function ReservationDetailPage() {
   const effectivePrix   = approvedPrixExc   ? approvedPrixExc.requested_value   : (unite?.prix ?? 0);
   const effectiveAvance = approvedAvanceExc ? approvedAvanceExc.requested_value : (reservation.montant_avance ?? 0);
 
+  // ── Paiements (ledger) ─────────────────────────────────────────────────────
+  // totalPaye est null tant que le panneau des paiements n'a pas encore chargé —
+  // dans ce cas on se rabat sur l'avance pour ne pas afficher de valeur fausse.
+  const paiementsLoaded = totalPaye !== null;
+  const totalPayeEffectif = totalPaye ?? effectiveAvance;
+  const resteAPayerVal = computeReste(effectivePrix, totalPayeEffectif);
+  const soldeComplet = estIntegralementPaye(effectivePrix, totalPayeEffectif);
+  const blockVenteIncomplete = paiementsLoaded && !soldeComplet;
+
   // ── Can-submit guards ─────────────────────────────────────────────────────
   const hasPendingPrix   = exceptions.some((e) => e.type === "PRIX"   && e.status === "EN_ATTENTE");
   const hasPendingAvance = exceptions.some((e) => e.type === "AVANCE" && e.status === "EN_ATTENTE");
@@ -118,7 +132,8 @@ export default function ReservationDetailPage() {
   const nextStatuts  = (workflow[currentStatut] || []) as StatutUnite[];
   const currentCfg   = STATUTS_UNITE[currentStatut];
   const isDesiste    = pendingStatut === "DESISTE";
-  const canConfirm   = !isDesiste || desistementType !== null;
+  const canConfirm   = (!isDesiste || desistementType !== null)
+    && !(pendingStatut === "VENDU" && blockVenteIncomplete);
 
   const handleConfirmTransition = async () => {
     if (!pendingStatut || !canConfirm) return;
@@ -210,6 +225,12 @@ export default function ReservationDetailPage() {
               <div className="rounded-xl px-4 py-2.5 text-sm font-bold" style={{ backgroundColor: STATUTS_UNITE[pendingStatut].bg, color: STATUTS_UNITE[pendingStatut].text }}>
                 {STATUTS_UNITE[pendingStatut].label}
               </div>
+            </div>
+          )}
+          {pendingStatut === "VENDU" && blockVenteIncomplete && (
+            <div className="mb-3 flex items-start gap-2 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2.5 text-xs text-amber-700">
+              <AlertCircle className="h-3.5 w-3.5 flex-shrink-0 mt-px" />
+              Paiement incomplet — il reste {formatMAD(resteAPayerVal)} à régler avant de passer à Vendu.
             </div>
           )}
           {isDesiste && (
@@ -469,19 +490,32 @@ export default function ReservationDetailPage() {
                 <div className="flex flex-wrap gap-2">
                   {nextStatuts.map((s) => {
                     const cfg = STATUTS_UNITE[s];
+                    const blocked = s === "VENDU" && blockVenteIncomplete;
                     return (
                       <button
                         key={s}
-                        onClick={() => handleOpenDialog(s)}
-                        className="rounded-full px-3 py-1.5 text-xs font-semibold border-2 transition-all hover:opacity-90 hover:scale-105 active:scale-95 flex items-center gap-1"
+                        onClick={() => { if (!blocked) handleOpenDialog(s); }}
+                        disabled={blocked}
+                        title={blocked ? `Reste à payer : ${formatMAD(resteAPayerVal)}` : undefined}
+                        className={`rounded-full px-3 py-1.5 text-xs font-semibold border-2 transition-all flex items-center gap-1 ${
+                          blocked
+                            ? "opacity-40 cursor-not-allowed"
+                            : "hover:opacity-90 hover:scale-105 active:scale-95"
+                        }`}
                         style={{ borderColor: cfg.color, color: cfg.color, backgroundColor: cfg.bg }}
                       >
-                        <ArrowRight className="h-3 w-3" />
+                        {blocked ? <Lock className="h-3 w-3" /> : <ArrowRight className="h-3 w-3" />}
                         {cfg.label}
                       </button>
                     );
                   })}
                 </div>
+                {nextStatuts.includes("VENDU") && blockVenteIncomplete && (
+                  <p className="mt-2.5 flex items-start gap-1.5 text-[11px] text-amber-600">
+                    <AlertCircle className="h-3.5 w-3.5 flex-shrink-0 mt-px" />
+                    Reste {formatMAD(resteAPayerVal)} à régler avant de passer à Vendu.
+                  </p>
+                )}
               </div>
             ) : (
               <p className="text-xs text-[#aaaaaa] text-center py-2">
@@ -642,6 +676,12 @@ export default function ReservationDetailPage() {
             </div>
           </div>
 
+          <PaiementsPanel
+            reservationId={reservation.id}
+            prixDu={effectivePrix}
+            onTotalChange={setTotalPaye}
+          />
+
           <TachesPanel
             context={{ reservation_id: reservation.id, client_id: reservation.client_id }}
             title="Tâches & activités"
@@ -685,10 +725,14 @@ export default function ReservationDetailPage() {
                     )}
                   </div>
                 </div>
+                <div className="flex justify-between">
+                  <span className="text-sm text-[#888888]">Total payé à ce jour</span>
+                  <span className="text-sm font-medium text-[#1a1a1a]">{formatMAD(totalPayeEffectif)}</span>
+                </div>
                 <div className="flex justify-between pt-2 border-t border-[#e8e6e1]">
                   <span className="text-sm font-bold text-[#1a1a1a]">Reste à payer</span>
-                  <span className="text-sm font-bold text-[#c8956c]">
-                    {formatMAD(effectivePrix - effectiveAvance)}
+                  <span className={`text-sm font-bold ${soldeComplet ? "text-emerald-600" : "text-[#c8956c]"}`}>
+                    {formatMAD(resteAPayerVal)}
                   </span>
                 </div>
               </div>

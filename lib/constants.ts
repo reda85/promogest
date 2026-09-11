@@ -34,6 +34,14 @@ export const PRIORITES_TACHE = {
   HAUTE:   { label: "Haute",   color: "#ef4444", bg: "#fef2f2" },
 } as const;
 
+export const TYPES_PAIEMENT = {
+  AVANCE:      { label: "Avance",       color: "#3b82f6", bg: "#eff6ff", text: "#1d4ed8" },
+  MENSUALITE:  { label: "Mensualité",   color: "#8b5cf6", bg: "#f5f3ff", text: "#6d28d9" },
+  VERSEMENT:   { label: "Versement",    color: "#c8956c", bg: "#fdf6f0", text: "#a67c52" },
+  SOLDE_FINAL: { label: "Solde final",  color: "#10b981", bg: "#ecfdf5", text: "#065f46" },
+  AUTRE:       { label: "Autre",        color: "#6b7280", bg: "#f9fafb", text: "#374151" },
+} as const;
+
 export const TYPES_BIEN = ["F2", "F3", "F4", "Duplex", "Studio", "Local Commercial", "Parking", "Cave"];
 export const VILLES = ["Casablanca", "Rabat", "Marrakech", "Tanger", "Fès", "Agadir", "Kénitra", "Mohammedia", "Meknès", "Oujda"];
 export const ORIENTATIONS = ["Nord", "Sud", "Est", "Ouest", "Nord-Est", "Nord-Ouest", "Sud-Est", "Sud-Ouest"];
