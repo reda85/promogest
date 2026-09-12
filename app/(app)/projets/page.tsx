@@ -50,14 +50,14 @@ export default function ProjetsPage() {
           const total = projet.nb_unites || 0;
           return (
             <Link key={projet.id} href={`/projets/${projet.id}`} className="block group">
-              <div className="rounded-2xl border border-[#e8e6e1] bg-white p-5 hover:shadow-md hover:border-[#c8956c]/30 transition-all">
+              <div className="rounded-2xl border border-[#e8e6e1] bg-white p-5 hover:shadow-md hover:border-[#c9773f]/30 transition-all">
                 {/* Header */}
                 <div className="flex items-start justify-between gap-3 mb-4">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#c8956c]/15 to-[#a67c52]/15 flex-shrink-0">
-                    <Building2 className="h-5 w-5 text-[#c8956c]" />
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#c9773f]/15 to-[#9c5a2e]/15 flex-shrink-0">
+                    <Building2 className="h-5 w-5 text-[#c9773f]" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-bold text-[#1a1a1a] group-hover:text-[#c8956c] transition-colors truncate">{projet.nom}</h3>
+                    <h3 className="font-bold text-[#1a1a1a] group-hover:text-[#c9773f] transition-colors truncate">{projet.nom}</h3>
                     <p className="text-xs text-[#888888]">{projet.quartier} · {projet.ville}</p>
                   </div>
                 </div>

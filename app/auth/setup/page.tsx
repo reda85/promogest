@@ -9,10 +9,11 @@
  */
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Home, AlertCircle } from "lucide-react";
+import { AlertCircle } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { LogoMark } from "@/components/shared/Logo";
 import { LoadingSpinner } from "@/components/shared/LoadingSpinner";
 import { createClient } from "@/lib/supabase/client";
 
@@ -85,9 +86,7 @@ export default function SetupPage() {
     <div className="min-h-screen flex items-center justify-center bg-[#f8f7f4]">
       <div className="w-full max-w-md">
         <div className="flex flex-col items-center mb-8">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[#c8956c] to-[#a67c52] mb-3">
-            <Home className="h-6 w-6 text-white" />
-          </div>
+          <LogoMark className="h-14 w-14 rounded-2xl mb-3" />
           <h1 className="text-2xl font-bold">
             PromoGest
           </h1>

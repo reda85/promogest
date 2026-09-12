@@ -102,17 +102,17 @@ export default function ReservationsPage() {
       <div className="space-y-3">
         {filtered.map((res) => (
           <Link key={res.id} href={`/reservations/${res.id}`} className="block group">
-            <div className="rounded-2xl border border-[#e8e6e1] bg-white p-4 hover:shadow-md hover:border-[#c8956c]/30 transition-all">
+            <div className="rounded-2xl border border-[#e8e6e1] bg-white p-4 hover:shadow-md hover:border-[#c9773f]/30 transition-all">
               <div className="flex items-center gap-4">
                 {/* Client avatar */}
-                <div className="h-10 w-10 rounded-full bg-gradient-to-br from-[#c8956c] to-[#a67c52] flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+                <div className="h-10 w-10 rounded-full bg-gradient-to-br from-[#c9773f] to-[#9c5a2e] flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
                   {res.client ? getInitials(res.client.prenom, res.client.nom) : "?"}
                 </div>
 
                 {/* Info */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-0.5">
-                    <p className="font-semibold text-[#1a1a1a] group-hover:text-[#c8956c] transition-colors">
+                    <p className="font-semibold text-[#1a1a1a] group-hover:text-[#c9773f] transition-colors">
                       {res.client ? `${res.client.prenom} ${res.client.nom}` : "Client inconnu"}
                     </p>
                     <StatutBadge statut={res.statut} />

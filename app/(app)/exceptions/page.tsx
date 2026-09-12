@@ -244,7 +244,7 @@ export default function ExceptionsPage() {
                   <div className="space-y-2">
                     {exc.client && (
                       <div className="flex items-center gap-2">
-                        <div className="h-8 w-8 rounded-full bg-gradient-to-br from-[#c8956c] to-[#a67c52] flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0">
+                        <div className="h-8 w-8 rounded-full bg-gradient-to-br from-[#c9773f] to-[#9c5a2e] flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0">
                           {exc.client.prenom[0]}{exc.client.nom[0]}
                         </div>
                         <div>
@@ -258,7 +258,7 @@ export default function ExceptionsPage() {
                     {exc.unite && (
                       <Link
                         href={`/reservations/${exc.resId}`}
-                        className="flex items-center gap-1 text-xs text-[#888888] hover:text-[#c8956c] transition-colors"
+                        className="flex items-center gap-1 text-xs text-[#888888] hover:text-[#c9773f] transition-colors"
                       >
                         <ChevronRight className="h-3 w-3" />
                         {exc.projet?.nom} · Unité {exc.unite.numero} · {exc.unite.type}

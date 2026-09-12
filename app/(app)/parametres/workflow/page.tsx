@@ -44,7 +44,7 @@ export default function WorkflowDesignerPage() {
       <div className="flex items-start justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <GitBranch className="h-5 w-5 text-[#c8956c]" />
+            <GitBranch className="h-5 w-5 text-[#c9773f]" />
             <h1 className="text-2xl font-bold">
               Designer de Workflow
             </h1>
@@ -156,7 +156,7 @@ export default function WorkflowDesignerPage() {
       {/* Live preview */}
       <div className="rounded-2xl border border-[#e8e6e1] bg-white p-5">
         <h3 className="text-sm font-semibold text-[#1a1a1a] mb-4 flex items-center gap-2">
-          <GitBranch className="h-4 w-4 text-[#c8956c]" />
+          <GitBranch className="h-4 w-4 text-[#c9773f]" />
           Aperçu du flux complet
         </h3>
         <div className="space-y-2.5">

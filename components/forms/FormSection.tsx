@@ -10,8 +10,8 @@ export function FormSection({ title, icon: Icon, children }: FormSectionProps) {
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-3">
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#c8956c]/10">
-          <Icon className="h-4 w-4 text-[#c8956c]" />
+        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#c9773f]/10">
+          <Icon className="h-4 w-4 text-[#c9773f]" />
         </div>
         <div className="flex-1">
           <h3 className="text-sm font-semibold text-[#1a1a1a]">{title}</h3>

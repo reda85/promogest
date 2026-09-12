@@ -93,7 +93,7 @@ export default function UnitePage() {
                   {perms.canEditUnite && (
                     <button
                       onClick={() => setEditOpen(true)}
-                      className="rounded-lg border border-[#e8e6e1] p-1.5 text-[#aaaaaa] hover:text-[#1a1a1a] hover:border-[#c8956c]/40 transition-colors"
+                      className="rounded-lg border border-[#e8e6e1] p-1.5 text-[#aaaaaa] hover:text-[#1a1a1a] hover:border-[#c9773f]/40 transition-colors"
                       title="Modifier l'unité"
                     >
                       <Pencil className="h-3.5 w-3.5" />
@@ -121,7 +121,7 @@ export default function UnitePage() {
                 { icon: Star, label: "Pièces", value: unite.nb_pieces ? `${unite.nb_pieces} pièces` : "—" },
               ].map((item) => (
                 <div key={item.label} className="flex items-center gap-2 rounded-xl bg-stone-50 p-3">
-                  <item.icon className="h-4 w-4 text-[#c8956c] flex-shrink-0" />
+                  <item.icon className="h-4 w-4 text-[#c9773f] flex-shrink-0" />
                   <div>
                     <p className="text-[10px] text-[#aaaaaa]">{item.label}</p>
                     <p className="text-sm font-medium text-[#1a1a1a]">{item.value}</p>
@@ -154,11 +154,11 @@ export default function UnitePage() {
             <div className="rounded-2xl border border-[#e8e6e1] bg-white p-5">
               <h3 className="text-sm font-semibold text-[#888888] mb-3">Client assigné</h3>
               <Link href={`/clients/${client.id}`} className="flex items-center gap-3 hover:opacity-80 transition-opacity group">
-                <div className="h-10 w-10 rounded-full bg-gradient-to-br from-[#c8956c] to-[#a67c52] flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+                <div className="h-10 w-10 rounded-full bg-gradient-to-br from-[#c9773f] to-[#9c5a2e] flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
                   {getInitials(client.prenom, client.nom)}
                 </div>
                 <div>
-                  <p className="font-semibold text-[#1a1a1a] group-hover:text-[#c8956c] transition-colors">
+                  <p className="font-semibold text-[#1a1a1a] group-hover:text-[#c9773f] transition-colors">
                     {client.prenom} {client.nom}
                   </p>
                   <p className="text-xs font-mono text-[#888888]">{client.cin}</p>
@@ -190,7 +190,7 @@ export default function UnitePage() {
           ) : (
             <div className="rounded-2xl border border-dashed border-[#e8e6e1] bg-white p-5 text-center">
               <p className="text-sm text-[#aaaaaa]">Aucun client assigné</p>
-              <Link href="/reservations/nouvelle" className="text-sm text-[#c8956c] hover:underline mt-1 block">
+              <Link href="/reservations/nouvelle" className="text-sm text-[#c9773f] hover:underline mt-1 block">
                 Créer une réservation →
               </Link>
             </div>
@@ -227,7 +227,7 @@ export default function UnitePage() {
                         <span className="text-[11px] text-[#888888]">par {event.agent}</span>
                       )}
                       {event.client_nom && (
-                        <span className="text-[11px] font-medium text-[#c8956c]">{event.client_nom}</span>
+                        <span className="text-[11px] font-medium text-[#c9773f]">{event.client_nom}</span>
                       )}
                     </div>
                   </div>

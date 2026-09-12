@@ -37,7 +37,7 @@ export const PRIORITES_TACHE = {
 export const TYPES_PAIEMENT = {
   AVANCE:      { label: "Avance",       color: "#3b82f6", bg: "#eff6ff", text: "#1d4ed8" },
   MENSUALITE:  { label: "Mensualité",   color: "#8b5cf6", bg: "#f5f3ff", text: "#6d28d9" },
-  VERSEMENT:   { label: "Versement",    color: "#c8956c", bg: "#fdf6f0", text: "#a67c52" },
+  VERSEMENT:   { label: "Versement",    color: "#c9773f", bg: "#fdf6f0", text: "#9c5a2e" },
   SOLDE_FINAL: { label: "Solde final",  color: "#10b981", bg: "#ecfdf5", text: "#065f46" },
   AUTRE:       { label: "Autre",        color: "#6b7280", bg: "#f9fafb", text: "#374151" },
 } as const;

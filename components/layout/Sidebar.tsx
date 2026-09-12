@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import {
   LayoutDashboard, Building2, Users, FileText, TrendingUp,
-  Briefcase, Plus, ChevronLeft, ChevronRight, Home, LogOut,
+  Briefcase, Plus, ChevronLeft, ChevronRight, LogOut,
   GitBranch, ShieldCheck, Bell, CheckSquare,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -13,6 +13,7 @@ import { type Role, ROLES, ROLE_LABELS, ROLE_ALLOWED_ROUTES } from "@/lib/roles"
 import { getCurrentRole, setCurrentRole } from "@/lib/role-store";
 import { getPendingCount, getPendingCountForRole } from "@/lib/exception-store";
 import { getOverdueTachesCount } from "@/lib/supabase/db";
+import { LogoMark } from "@/components/shared/Logo";
 
 async function handleLogout() {
   try {
@@ -86,12 +87,10 @@ export function Sidebar() {
     >
       {/* Logo */}
       <div className={cn("flex items-center gap-3 px-4 py-5 border-b border-white/10", collapsed && "justify-center px-2")}>
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-[#c8956c] to-[#a67c52] flex-shrink-0">
-          <Home className="h-4 w-4 text-white" />
-        </div>
+        <LogoMark className="h-8 w-8" />
         {!collapsed && (
           <div>
-            <span className="text-white font-bold text-sm bg-gradient-to-r from-[#c8956c] to-[#e8b89a] bg-clip-text text-transparent">
+            <span className="text-white font-bold text-sm bg-gradient-to-r from-[#c9773f] to-[#eab074] bg-clip-text text-transparent">
               PromoGest
             </span>
             <p className="text-[10px] text-white/40">CRM Immobilier</p>
@@ -119,7 +118,7 @@ export function Sidebar() {
                 "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all",
                 collapsed && "justify-center px-2",
                 isActive
-                  ? "bg-[#c8956c]/20 text-[#c8956c]"
+                  ? "bg-[#c9773f]/20 text-[#c9773f]"
                   : "text-white/60 hover:bg-white/5 hover:text-white"
               )}
               title={collapsed ? item.label : undefined}
@@ -140,7 +139,7 @@ export function Sidebar() {
 
               {/* Active dot (when no badge) */}
               {isActive && !collapsed && badgeCount === 0 && (
-                <div className="ml-auto h-1.5 w-1.5 rounded-full bg-[#c8956c]" />
+                <div className="ml-auto h-1.5 w-1.5 rounded-full bg-[#c9773f]" />
               )}
             </Link>
           );
@@ -192,7 +191,7 @@ export function Sidebar() {
       <div className={cn("border-t border-white/10 p-3", collapsed && "flex justify-center")}>
         {!collapsed ? (
           <div className="flex items-center gap-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-[#c8956c] to-[#a67c52] text-white text-xs font-bold flex-shrink-0">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-[#c9773f] to-[#9c5a2e] text-white text-xs font-bold flex-shrink-0">
               MB
             </div>
             <div className="flex-1 min-w-0">
@@ -204,7 +203,7 @@ export function Sidebar() {
             </button>
           </div>
         ) : (
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-[#c8956c] to-[#a67c52] text-white text-xs font-bold">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-[#c9773f] to-[#9c5a2e] text-white text-xs font-bold">
             MB
           </div>
         )}

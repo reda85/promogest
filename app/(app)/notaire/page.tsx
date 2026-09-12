@@ -69,18 +69,18 @@ export default function NotairePage() {
 
           return (
             <Link key={dossier.id} href={`/notaire/${dossier.id}`} className="block group">
-              <div className="rounded-2xl border border-[#e8e6e1] bg-white p-5 hover:shadow-md hover:border-[#c8956c]/30 transition-all">
+              <div className="rounded-2xl border border-[#e8e6e1] bg-white p-5 hover:shadow-md hover:border-[#c9773f]/30 transition-all">
                 <div className="flex items-start gap-4">
                   {/* Client avatar */}
                   {dossier.client && (
-                    <div className="h-10 w-10 rounded-full bg-gradient-to-br from-[#c8956c] to-[#a67c52] flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+                    <div className="h-10 w-10 rounded-full bg-gradient-to-br from-[#c9773f] to-[#9c5a2e] flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
                       {getInitials(dossier.client.prenom, dossier.client.nom)}
                     </div>
                   )}
 
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1 flex-wrap">
-                      <p className="font-bold text-[#1a1a1a] group-hover:text-[#c8956c] transition-colors">
+                      <p className="font-bold text-[#1a1a1a] group-hover:text-[#c9773f] transition-colors">
                         {dossier.client ? `${dossier.client.prenom} ${dossier.client.nom}` : "—"}
                       </p>
                       <span
@@ -127,7 +127,7 @@ export default function NotairePage() {
                   <div className="mt-4 flex items-center gap-3">
                     <div className="flex-1 h-1.5 rounded-full bg-stone-100 overflow-hidden">
                       <div
-                        className="h-full rounded-full bg-gradient-to-r from-[#c8956c] to-[#a67c52]"
+                        className="h-full rounded-full bg-gradient-to-r from-[#c9773f] to-[#9c5a2e]"
                         style={{ width: `${docsComplet}%` }}
                       />
                     </div>

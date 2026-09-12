@@ -54,7 +54,7 @@ export default function GHPage() {
         {perms.canEditProject && (
           <button
             onClick={() => setEditOpen(true)}
-            className="flex items-center gap-1.5 rounded-lg border border-[#e8e6e1] bg-white px-3 py-2 text-xs font-medium text-[#888888] hover:text-[#1a1a1a] hover:border-[#c8956c]/40 transition-colors"
+            className="flex items-center gap-1.5 rounded-lg border border-[#e8e6e1] bg-white px-3 py-2 text-xs font-medium text-[#888888] hover:text-[#1a1a1a] hover:border-[#c9773f]/40 transition-colors"
           >
             <Pencil className="h-3.5 w-3.5" />
             Modifier
@@ -93,7 +93,7 @@ export default function GHPage() {
         ) : (
         <button
           onClick={() => setImmeubleDialogOpen(true)}
-          className="flex items-center gap-1.5 rounded-lg bg-[#c8956c] px-3 py-2 text-xs font-semibold text-white hover:bg-[#a67c52] transition-colors"
+          className="flex items-center gap-1.5 rounded-lg bg-[#c9773f] px-3 py-2 text-xs font-semibold text-white hover:bg-[#9c5a2e] transition-colors"
         >
           <Plus className="h-3.5 w-3.5" />
           Nouvel immeuble
@@ -112,10 +112,10 @@ export default function GHPage() {
 
           return (
             <Link key={immeuble.id} href={`/projets/${projetId}/${ghId}/${immeuble.id}`} className="block group">
-              <div className="rounded-2xl border border-[#e8e6e1] bg-white p-5 hover:shadow-md hover:border-[#c8956c]/30 transition-all">
+              <div className="rounded-2xl border border-[#e8e6e1] bg-white p-5 hover:shadow-md hover:border-[#c9773f]/30 transition-all">
                 <div className="flex items-center justify-between mb-4">
                   <div>
-                    <h3 className="font-bold text-[#1a1a1a] group-hover:text-[#c8956c] transition-colors">{immeuble.nom}</h3>
+                    <h3 className="font-bold text-[#1a1a1a] group-hover:text-[#c9773f] transition-colors">{immeuble.nom}</h3>
                     <p className="text-xs text-[#888888]">{immeuble.nb_etages} étages · {unites.length} unités</p>
                   </div>
                 </div>

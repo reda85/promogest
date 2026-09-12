@@ -5,7 +5,7 @@ import { Search, X, User, Building2, Home, CheckSquare, Scale, Loader2 } from "l
 import { globalSearch, type SearchResult, type SearchResultType } from "@/lib/supabase/db";
 
 const TYPE_META: Record<SearchResultType, { label: string; icon: typeof User; color: string }> = {
-  client:  { label: "Clients",  icon: User,        color: "#c8956c" },
+  client:  { label: "Clients",  icon: User,        color: "#c9773f" },
   projet:  { label: "Projets",  icon: Building2,   color: "#3b82f6" },
   unite:   { label: "Unités",   icon: Home,        color: "#10b981" },
   tache:   { label: "Tâches",   icon: CheckSquare, color: "#8b5cf6" },
@@ -108,9 +108,9 @@ export function GlobalSearch() {
   const showPanel = open && query.trim().length >= 2;
 
   return (
-    <div ref={boxRef} className="relative">
+    <div ref={boxRef} className="relative w-full max-w-md sm:max-w-lg">
       <div className="relative">
-        <Search className="pointer-events-none absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#aaaaaa]" />
+        <Search className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#aaaaaa]" />
         <input
           ref={inputRef}
           type="text"
@@ -118,28 +118,28 @@ export function GlobalSearch() {
           onChange={(e) => onChange(e.target.value)}
           onFocus={() => { if (results.length) setOpen(true); }}
           onKeyDown={onKeyDown}
-          placeholder="Rechercher…"
-          className="h-9 w-44 rounded-lg border border-[#e8e6e1] bg-white pl-8 pr-8 text-sm text-[#1a1a1a] placeholder:text-[#aaaaaa] transition-all focus:w-56 focus:border-[#c8956c] focus:outline-none focus:ring-2 focus:ring-[#c8956c]/30 sm:w-56 sm:focus:w-72"
+          placeholder="Rechercher un client, un projet, une unité…"
+          className="h-12 w-full rounded-xl border border-[#e8e6e1] bg-white pl-11 pr-12 text-base text-[#1a1a1a] placeholder:text-[#aaaaaa] transition-all focus:border-[#c9773f] focus:outline-none focus:ring-2 focus:ring-[#c9773f]/30"
         />
         {loading ? (
-          <Loader2 className="absolute right-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 animate-spin text-[#aaaaaa]" />
+          <Loader2 className="absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 animate-spin text-[#aaaaaa]" />
         ) : query ? (
           <button
             onClick={() => { setQuery(""); setResults([]); setOpen(false); inputRef.current?.focus(); }}
-            className="absolute right-2 top-1/2 -translate-y-1/2 rounded p-0.5 text-[#aaaaaa] hover:text-[#1a1a1a]"
+            className="absolute right-3.5 top-1/2 -translate-y-1/2 rounded p-0.5 text-[#aaaaaa] hover:text-[#1a1a1a]"
             aria-label="Effacer"
           >
-            <X className="h-3.5 w-3.5" />
+            <X className="h-4 w-4" />
           </button>
         ) : (
-          <kbd className="pointer-events-none absolute right-2 top-1/2 hidden -translate-y-1/2 rounded border border-[#e8e6e1] bg-stone-50 px-1 text-[10px] font-medium text-[#aaaaaa] md:block">
+          <kbd className="pointer-events-none absolute right-3.5 top-1/2 hidden -translate-y-1/2 rounded border border-[#e8e6e1] bg-stone-50 px-1.5 py-0.5 text-[11px] font-medium text-[#aaaaaa] md:block">
             ⌘K
           </kbd>
         )}
       </div>
 
       {showPanel && (
-        <div className="absolute right-0 z-50 mt-1.5 w-80 max-w-[calc(100vw-2rem)] overflow-hidden rounded-xl border border-[#e8e6e1] bg-white shadow-lg">
+        <div className="absolute left-0 right-0 z-50 mt-1.5 overflow-hidden rounded-xl border border-[#e8e6e1] bg-white shadow-lg">
           {results.length === 0 && !loading ? (
             <p className="px-4 py-6 text-center text-sm text-[#aaaaaa]">
               Aucun résultat pour « {query.trim()} »

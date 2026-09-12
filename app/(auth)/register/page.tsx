@@ -1,10 +1,11 @@
 "use client";
 import Link from "next/link";
 import { useState } from "react";
-import { Home, AlertCircle, CheckCircle } from "lucide-react";
+import { AlertCircle, CheckCircle } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { LogoMark } from "@/components/shared/Logo";
 import { createClient } from "@/lib/supabase/client";
 
 export default function RegisterPage() {
@@ -67,9 +68,7 @@ export default function RegisterPage() {
     <div className="min-h-screen flex items-center justify-center bg-[#f8f7f4]">
       <div className="w-full max-w-md">
         <div className="flex flex-col items-center mb-8">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[#c8956c] to-[#a67c52] mb-3">
-            <Home className="h-6 w-6 text-white" />
-          </div>
+          <LogoMark className="h-14 w-14 rounded-2xl mb-3" />
           <h1 className="text-2xl font-bold">
             PromoGest
           </h1>
@@ -89,7 +88,7 @@ export default function RegisterPage() {
                   sera configurée automatiquement à votre première connexion.
                 </p>
               ) : null}
-              <Link href="/login" className="mt-2 text-sm text-[#c8956c] hover:underline">
+              <Link href="/login" className="mt-2 text-sm text-[#c9773f] hover:underline">
                 Se connecter →
               </Link>
             </div>
@@ -139,7 +138,7 @@ export default function RegisterPage() {
           {!success && (
             <p className="text-center text-sm text-[#888888] mt-4">
               Déjà un compte?{" "}
-              <Link href="/login" className="text-[#c8956c] hover:underline">
+              <Link href="/login" className="text-[#c9773f] hover:underline">
                 Se connecter
               </Link>
             </p>

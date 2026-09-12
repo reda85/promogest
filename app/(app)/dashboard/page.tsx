@@ -58,7 +58,7 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <KPICard title="Unités vendues"        value={unitesVendues}         subtitle={`sur ${total} unités totales`}   icon={Home}       color="#10b981" />
         <KPICard title="Réservations en cours" value={reservationsEnCours}   subtitle="RÉSERVÉ + COMPROMIS + NOTAIRE"    icon={CheckCircle} color="#3b82f6" />
-        <KPICard title="CA réalisé"            value={formatMAD(caRealise)}  subtitle="Unités vendues"                   icon={DollarSign}  color="#c8956c" />
+        <KPICard title="CA réalisé"            value={formatMAD(caRealise)}  subtitle="Unités vendues"                   icon={DollarSign}  color="#c9773f" />
         <KPICard title="CA pipeline"           value={formatMAD(caPipeline)} subtitle="Réservations actives (estimé)"    icon={TrendingUp}  color="#8b5cf6" />
       </div>
 
@@ -108,7 +108,7 @@ export default function DashboardPage() {
                   <Link key={projet.id} href={`/projets/${projet.id}`} className="block group">
                     <div className="flex items-start justify-between gap-2 mb-1.5">
                       <div>
-                        <p className="text-sm font-semibold text-[#1a1a1a] group-hover:text-[#c8956c] transition-colors">
+                        <p className="text-sm font-semibold text-[#1a1a1a] group-hover:text-[#c9773f] transition-colors">
                           {projet.nom}
                         </p>
                         <p className="text-xs text-[#888888]">{projet.quartier}, {projet.ville}</p>
@@ -116,7 +116,7 @@ export default function DashboardPage() {
                       <span className="text-xs font-bold text-[#1a1a1a] flex-shrink-0">{vendues}/{projet.nb_unites ?? 0}</span>
                     </div>
                     <div className="h-1.5 rounded-full bg-stone-100 overflow-hidden">
-                      <div className="h-full rounded-full bg-gradient-to-r from-[#c8956c] to-[#a67c52] transition-all" style={{ width: `${pct}%` }} />
+                      <div className="h-full rounded-full bg-gradient-to-r from-[#c9773f] to-[#9c5a2e] transition-all" style={{ width: `${pct}%` }} />
                     </div>
                     <p className="text-xs text-[#aaaaaa] mt-0.5">{formatMAD(projet.ca_realise)} CA réalisé</p>
                   </Link>

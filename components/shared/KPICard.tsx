@@ -11,7 +11,7 @@ interface KPICardProps {
   className?: string;
 }
 
-export function KPICard({ title, value, subtitle, icon: Icon, color = "#c8956c", trend, className }: KPICardProps) {
+export function KPICard({ title, value, subtitle, icon: Icon, color = "#c9773f", trend, className }: KPICardProps) {
   return (
     <div className={cn("relative overflow-hidden rounded-2xl border border-[#e8e6e1] bg-white p-5", className)}>
       <div className="absolute top-0 left-0 right-0 h-1 rounded-t-2xl" style={{ background: `linear-gradient(90deg, ${color}, ${color}99)` }} />

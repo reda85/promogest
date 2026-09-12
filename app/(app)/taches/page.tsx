@@ -89,7 +89,7 @@ export default function TachesPage() {
         </div>
         <button
           onClick={openNew}
-          className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#c8956c] to-[#a67c52] px-4 py-2 text-sm font-medium text-white transition-all hover:opacity-90"
+          className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#c9773f] to-[#9c5a2e] px-4 py-2 text-sm font-medium text-white transition-all hover:opacity-90"
         >
           <Plus className="h-4 w-4" />
           Nouvelle tâche
@@ -244,7 +244,7 @@ function TacheCard({
             {tache.client && (
               <Link
                 href={`/clients/${tache.client.id}`}
-                className="flex items-center gap-1 text-[11px] text-[#888888] hover:text-[#c8956c] transition-colors"
+                className="flex items-center gap-1 text-[11px] text-[#888888] hover:text-[#c9773f] transition-colors"
               >
                 <User className="h-3 w-3" />
                 {tache.client.prenom} {tache.client.nom}
@@ -253,7 +253,7 @@ function TacheCard({
             {tache.reservation && (
               <Link
                 href={`/reservations/${tache.reservation.id}`}
-                className="flex items-center gap-1 text-[11px] text-[#888888] hover:text-[#c8956c] transition-colors"
+                className="flex items-center gap-1 text-[11px] text-[#888888] hover:text-[#c9773f] transition-colors"
               >
                 <FileText className="h-3 w-3" />
                 Réservation{tache.reservation.unite ? ` · Unité ${tache.reservation.unite.numero}` : ""}
@@ -262,7 +262,7 @@ function TacheCard({
             {projet && (
               <Link
                 href={`/projets/${projet.id}`}
-                className="flex items-center gap-1 text-[11px] text-[#888888] hover:text-[#c8956c] transition-colors"
+                className="flex items-center gap-1 text-[11px] text-[#888888] hover:text-[#c9773f] transition-colors"
               >
                 <Building2 className="h-3 w-3" />
                 {projet.nom}

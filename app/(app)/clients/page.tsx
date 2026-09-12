@@ -79,11 +79,11 @@ export default function ClientsPage() {
                 <tr key={client.id} className="hover:bg-stone-50 transition-colors">
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-3">
-                      <div className="h-8 w-8 rounded-full bg-gradient-to-br from-[#c8956c] to-[#a67c52] flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                      <div className="h-8 w-8 rounded-full bg-gradient-to-br from-[#c9773f] to-[#9c5a2e] flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
                         {getInitials(client.prenom, client.nom)}
                       </div>
                       <div>
-                        <Link href={`/clients/${client.id}`} className="font-semibold text-[#1a1a1a] hover:text-[#c8956c] transition-colors">
+                        <Link href={`/clients/${client.id}`} className="font-semibold text-[#1a1a1a] hover:text-[#c9773f] transition-colors">
                           {client.prenom} {client.nom}
                         </Link>
                         {client.email && <p className="text-xs text-[#888888]">{client.email}</p>}
@@ -105,7 +105,7 @@ export default function ClientsPage() {
                     {statut && <StatutBadge statut={statut} />}
                   </td>
                   <td className="px-4 py-3">
-                    <Link href={`/clients/${client.id}`} className="text-[#c8956c] hover:underline text-xs">
+                    <Link href={`/clients/${client.id}`} className="text-[#c9773f] hover:underline text-xs">
                       Voir →
                     </Link>
                   </td>

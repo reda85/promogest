@@ -258,9 +258,9 @@ export default function PipelinePage() {
                               <div
                                 className={`rounded-xl border bg-white p-3 transition-all ${
                                   snapshot.isDragging
-                                    ? "shadow-xl border-[#c8956c] rotate-1 scale-105"
+                                    ? "shadow-xl border-[#c9773f] rotate-1 scale-105"
                                     : "border-[#e8e6e1] hover:shadow-md"
-                                } ${movedId === card.id ? "ring-2 ring-[#c8956c] ring-offset-1" : ""}`}
+                                } ${movedId === card.id ? "ring-2 ring-[#c9773f] ring-offset-1" : ""}`}
                               >
                                 {/* Drag handle + Client */}
                                 <div className="flex items-center gap-2 mb-2">
@@ -270,14 +270,14 @@ export default function PipelinePage() {
                                   >
                                     <GripVertical className="h-4 w-4" />
                                   </div>
-                                  <div className="h-7 w-7 rounded-full bg-gradient-to-br from-[#c8956c] to-[#a67c52] flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0">
+                                  <div className="h-7 w-7 rounded-full bg-gradient-to-br from-[#c9773f] to-[#9c5a2e] flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0">
                                     {card.client ? getInitials(card.client.prenom, card.client.nom) : "?"}
                                   </div>
                                   <div className="flex-1 min-w-0">
                                     <Link
                                       href={`/reservations/${card.id}`}
                                       onClick={(e) => { if (snapshot.isDragging) e.preventDefault(); }}
-                                      className="text-xs font-semibold text-[#1a1a1a] truncate block hover:text-[#c8956c] transition-colors"
+                                      className="text-xs font-semibold text-[#1a1a1a] truncate block hover:text-[#c9773f] transition-colors"
                                     >
                                       {card.client ? `${card.client.prenom} ${card.client.nom}` : "—"}
                                     </Link>

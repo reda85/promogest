@@ -64,7 +64,7 @@ export default function ProjetPage() {
           </h2>
           <button
             onClick={() => setGhDialogOpen(true)}
-            className="flex items-center gap-1.5 rounded-lg bg-[#c8956c] px-3 py-2 text-xs font-semibold text-white hover:bg-[#a67c52] transition-colors"
+            className="flex items-center gap-1.5 rounded-lg bg-[#c9773f] px-3 py-2 text-xs font-semibold text-white hover:bg-[#9c5a2e] transition-colors"
           >
             <Plus className="h-3.5 w-3.5" />
             Nouveau GH
@@ -75,13 +75,13 @@ export default function ProjetPage() {
             const nbUnites = gh.immeubles.reduce((sum, i) => sum + (i.unites?.length || 0), 0);
             return (
               <Link key={gh.id} href={`/projets/${projetId}/${gh.id}`} className="block group">
-                <div className="rounded-2xl border border-[#e8e6e1] bg-white p-5 hover:shadow-md hover:border-[#c8956c]/30 transition-all">
+                <div className="rounded-2xl border border-[#e8e6e1] bg-white p-5 hover:shadow-md hover:border-[#c9773f]/30 transition-all">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="h-10 w-10 rounded-xl bg-[#c8956c]/10 flex items-center justify-center">
-                      <Layers className="h-5 w-5 text-[#c8956c]" />
+                    <div className="h-10 w-10 rounded-xl bg-[#c9773f]/10 flex items-center justify-center">
+                      <Layers className="h-5 w-5 text-[#c9773f]" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-[#1a1a1a] group-hover:text-[#c8956c] transition-colors">{gh.nom}</h3>
+                      <h3 className="font-bold text-[#1a1a1a] group-hover:text-[#c9773f] transition-colors">{gh.nom}</h3>
                       {gh.description && <p className="text-xs text-[#888888]">{gh.description}</p>}
                     </div>
                   </div>

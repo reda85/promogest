@@ -463,26 +463,12 @@ export async function createReservation(payload: {
     .select()
     .single();
   if (error) throw error;
-  const reservation = data as unknown as Reservation;
-
-  // Seed the initial payment ledger entry from the avance captured at booking
-  // (best-effort — the reservation itself is already saved either way).
-  if (payload.montant_avance && payload.montant_avance > 0) {
-    try {
-      await getDB().from("paiements").insert({
-        reservation_id: reservation.id,
-        type: "AVANCE" as TypePaiement,
-        montant: payload.montant_avance,
-        date_paiement: payload.date_reservation,
-        mode_paiement: payload.mode_versement_avance || payload.mode_paiement,
-        reference: payload.numero_cheque,
-      });
-    } catch {
-      // ignore — the payment can be logged manually from the reservation page
-    }
-  }
-
-  return reservation;
+  // NB: montant_avance is the *declared* deposit — a term of the booking, not yet
+  // money received. It is not auto-logged to the payment ledger: a reservation
+  // must show zero real payments until someone actually records one via the
+  // Paiements panel. This keeps a genuine window, before that first payment,
+  // during which a price/avance reduction can still be requested.
+  return data as unknown as Reservation;
 }
 
 export async function updateUniteStatut(uniteId: string, statut: StatutUnite): Promise<void> {

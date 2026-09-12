@@ -3,8 +3,8 @@
 @import "tailwindcss";
 
 :root {
-  --primary: #c8956c;
-  --primary-dark: #a67c52;
+  --primary: #c9773f;
+  --primary-dark: #9c5a2e;
   --dark-1: #1a2332;
   --dark-2: #0f1923;
   --background: #f8f7f4;
@@ -40,4 +40,4 @@ code, pre, kbd, samp {
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #e8e6e1; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #c8956c; }
+::-webkit-scrollbar-thumb:hover { background: #c9773f; }

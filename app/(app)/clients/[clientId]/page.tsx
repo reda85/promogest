@@ -39,13 +39,13 @@ export default function ClientDetailPage() {
         <div className="space-y-4">
           {/* Avatar card */}
           <div className="rounded-2xl border border-[#e8e6e1] bg-white p-5 text-center">
-            <div className="h-20 w-20 rounded-full bg-gradient-to-br from-[#c8956c] to-[#a67c52] flex items-center justify-center text-white text-2xl font-bold mx-auto mb-3">
+            <div className="h-20 w-20 rounded-full bg-gradient-to-br from-[#c9773f] to-[#9c5a2e] flex items-center justify-center text-white text-2xl font-bold mx-auto mb-3">
               {getInitials(client.prenom, client.nom)}
             </div>
             <h1 className="text-xl font-bold text-[#1a1a1a]">{client.prenom} {client.nom}</h1>
             <p className="text-sm font-mono text-[#888888] mt-0.5">{client.cin}</p>
             {client.source && (
-              <span className="inline-block mt-2 rounded-full bg-[#c8956c]/10 px-3 py-1 text-xs font-medium text-[#c8956c]">
+              <span className="inline-block mt-2 rounded-full bg-[#c9773f]/10 px-3 py-1 text-xs font-medium text-[#c9773f]">
                 {client.source}
               </span>
             )}
@@ -61,7 +61,7 @@ export default function ClientDetailPage() {
               { icon: MapPin, label: client.ville },
             ].filter((i) => i.label).map((item, idx) => (
               <div key={idx} className="flex items-center gap-2">
-                <item.icon className="h-4 w-4 text-[#c8956c] flex-shrink-0" />
+                <item.icon className="h-4 w-4 text-[#c9773f] flex-shrink-0" />
                 <span className={`text-sm ${item.muted ? "text-[#aaaaaa]" : "text-[#1a1a1a]"}`}>{item.label}</span>
               </div>
             ))}
@@ -94,7 +94,7 @@ export default function ClientDetailPage() {
               <h3 className="text-base font-semibold text-[#1a1a1a]">
                 Réservations ({client.reservations.length})
               </h3>
-              <Link href="/reservations/nouvelle" className="text-sm text-[#c8956c] hover:underline">
+              <Link href="/reservations/nouvelle" className="text-sm text-[#c9773f] hover:underline">
                 + Nouvelle réservation
               </Link>
             </div>
@@ -141,7 +141,7 @@ export default function ClientDetailPage() {
                         )}
                       </div>
                       <div className="mt-3 pt-3 border-t border-[#e8e6e1]">
-                        <Link href={`/reservations/${res.id}`} className="text-xs text-[#c8956c] hover:underline">
+                        <Link href={`/reservations/${res.id}`} className="text-xs text-[#c9773f] hover:underline">
                           Voir la réservation →
                         </Link>
                       </div>

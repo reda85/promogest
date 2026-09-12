@@ -80,8 +80,8 @@ export function GHFormDialog({
       <DialogContent className="max-w-md">
         <DialogHeader>
           <div className="flex items-center gap-3 mb-1">
-            <div className="h-9 w-9 rounded-xl bg-[#c8956c]/10 flex items-center justify-center">
-              <Layers className="h-4.5 w-4.5 text-[#c8956c]" />
+            <div className="h-9 w-9 rounded-xl bg-[#c9773f]/10 flex items-center justify-center">
+              <Layers className="h-4.5 w-4.5 text-[#c9773f]" />
             </div>
             <DialogTitle>
               {isEdit ? "Modifier le groupe d'habitation" : "Nouveau groupe d'habitation"}

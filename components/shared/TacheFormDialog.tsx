@@ -197,7 +197,7 @@ export function TacheFormDialog({
               <select
                 value={clientId}
                 onChange={(e) => setClientId(e.target.value)}
-                className="flex h-9 w-full rounded-lg border border-[#e8e6e1] bg-white px-3 text-sm text-[#1a1a1a] focus:outline-none focus:ring-2 focus:ring-[#c8956c]/30 focus:border-[#c8956c] transition-colors"
+                className="flex h-9 w-full rounded-lg border border-[#e8e6e1] bg-white px-3 text-sm text-[#1a1a1a] focus:outline-none focus:ring-2 focus:ring-[#c9773f]/30 focus:border-[#c9773f] transition-colors"
               >
                 <option value="">— Aucun —</option>
                 {clients!.map((c) => (

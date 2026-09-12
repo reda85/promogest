@@ -67,7 +67,7 @@ export function PaiementsPanel({ reservationId, prixDu, onTotalChange }: Props) 
         </h3>
         <button
           onClick={() => setDialogOpen(true)}
-          className="flex items-center gap-1 text-sm text-[#c8956c] hover:underline"
+          className="flex items-center gap-1 text-sm text-[#c9773f] hover:underline"
         >
           <Plus className="h-3.5 w-3.5" />
           Ajouter
@@ -91,7 +91,7 @@ export function PaiementsPanel({ reservationId, prixDu, onTotalChange }: Props) 
       </div>
       <div className="h-1.5 rounded-full bg-stone-100 overflow-hidden mb-4">
         <div
-          className={`h-full rounded-full transition-all ${complet ? "bg-emerald-500" : "bg-gradient-to-r from-[#c8956c] to-[#a67c52]"}`}
+          className={`h-full rounded-full transition-all ${complet ? "bg-emerald-500" : "bg-gradient-to-r from-[#c9773f] to-[#9c5a2e]"}`}
           style={{ width: `${pct}%` }}
         />
       </div>

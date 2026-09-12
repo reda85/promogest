@@ -1,10 +1,11 @@
 "use client";
 import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { Home, Eye, EyeOff, AlertCircle } from "lucide-react";
+import { Eye, EyeOff, AlertCircle } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { LogoMark } from "@/components/shared/Logo";
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
 
@@ -83,7 +84,7 @@ function LoginForm() {
       </form>
       <p className="text-center text-sm text-[#888888] mt-4">
         Pas encore de compte?{" "}
-        <Link href="/register" className="text-[#c8956c] hover:underline">
+        <Link href="/register" className="text-[#c9773f] hover:underline">
           S&apos;inscrire
         </Link>
       </p>
@@ -97,9 +98,7 @@ export default function LoginPage() {
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="flex flex-col items-center mb-8">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[#c8956c] to-[#a67c52] mb-3">
-            <Home className="h-6 w-6 text-white" />
-          </div>
+          <LogoMark className="h-14 w-14 rounded-2xl mb-3" />
           <h1 className="text-2xl font-bold text-[#1a1a1a]">
             PromoGest
           </h1>

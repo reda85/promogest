@@ -114,19 +114,24 @@ export default function ReservationDetailPage() {
   const effectiveAvance = approvedAvanceExc ? approvedAvanceExc.requested_value : (reservation.montant_avance ?? 0);
 
   // ── Paiements (ledger) ─────────────────────────────────────────────────────
-  // totalPaye est null tant que le panneau des paiements n'a pas encore chargé —
-  // dans ce cas on se rabat sur l'avance pour ne pas afficher de valeur fausse.
+  // totalPaye est null tant que le panneau des paiements n'a pas encore chargé.
   const paiementsLoaded = totalPaye !== null;
-  const totalPayeEffectif = totalPaye ?? effectiveAvance;
+  const totalPayeEffectif = totalPaye ?? 0;
   const resteAPayerVal = computeReste(effectivePrix, totalPayeEffectif);
   const soldeComplet = estIntegralementPaye(effectivePrix, totalPayeEffectif);
   const blockVenteIncomplete = paiementsLoaded && !soldeComplet;
+  // Aucun paiement encore enregistré — condition confirmée (pas juste "pas encore su"),
+  // pour éviter qu'un bouton apparaisse puis disparaisse une fois les paiements chargés.
+  const hasNoPayments = totalPaye === 0;
 
   // ── Can-submit guards ─────────────────────────────────────────────────────
+  // Une demande de réduction (prix ou avance) n'a de sens qu'avant le premier
+  // paiement réel — au-delà, le client a déjà payé sur la base des conditions
+  // en vigueur et toute renégociation doit passer par un autre circuit.
   const hasPendingPrix   = exceptions.some((e) => e.type === "PRIX"   && e.status === "EN_ATTENTE");
   const hasPendingAvance = exceptions.some((e) => e.type === "AVANCE" && e.status === "EN_ATTENTE");
-  const canSubmitPrix    = !isAdmin && !hasPendingPrix   && !approvedPrixExc   && effectivePrix   > 0;
-  const canSubmitAvance  = !isAdmin && !hasPendingAvance && !approvedAvanceExc && effectiveAvance > 0;
+  const canSubmitPrix    = !isAdmin && hasNoPayments && !hasPendingPrix   && !approvedPrixExc   && effectivePrix   > 0;
+  const canSubmitAvance  = !isAdmin && hasNoPayments && !hasPendingAvance && !approvedAvanceExc && effectiveAvance > 0;
 
   // ── Workflow helpers ──────────────────────────────────────────────────────
   const nextStatuts  = (workflow[currentStatut] || []) as StatutUnite[];
@@ -420,11 +425,11 @@ export default function ReservationDetailPage() {
             <div className="rounded-2xl border border-[#e8e6e1] bg-white p-5">
               <h3 className="text-sm font-semibold text-[#888888] mb-3">Client</h3>
               <Link href={`/clients/${client.id}`} className="flex items-center gap-3 group">
-                <div className="h-12 w-12 rounded-full bg-gradient-to-br from-[#c8956c] to-[#a67c52] flex items-center justify-center text-white font-bold flex-shrink-0">
+                <div className="h-12 w-12 rounded-full bg-gradient-to-br from-[#c9773f] to-[#9c5a2e] flex items-center justify-center text-white font-bold flex-shrink-0">
                   {getInitials(client.prenom, client.nom)}
                 </div>
                 <div>
-                  <p className="font-bold text-[#1a1a1a] group-hover:text-[#c8956c] transition-colors">
+                  <p className="font-bold text-[#1a1a1a] group-hover:text-[#c9773f] transition-colors">
                     {client.prenom} {client.nom}
                   </p>
                   <p className="text-xs font-mono text-[#888888]">{client.cin}</p>
@@ -443,7 +448,7 @@ export default function ReservationDetailPage() {
                 className="space-y-2 group block"
               >
                 <div className="flex items-center justify-between">
-                  <p className="font-bold text-[#1a1a1a] group-hover:text-[#c8956c] transition-colors font-mono">
+                  <p className="font-bold text-[#1a1a1a] group-hover:text-[#c9773f] transition-colors font-mono">
                     Unité {unite.numero}
                   </p>
                   <StatutBadge statut={unite.statut} />
@@ -635,7 +640,11 @@ export default function ReservationDetailPage() {
             )}
 
             {!isAdmin && !canSubmitPrix && !canSubmitAvance && exceptions.length === 0 && (
-              <p className="text-xs text-[#aaaaaa] text-center py-2">Aucune exception disponible</p>
+              <p className="text-xs text-[#aaaaaa] text-center py-2">
+                {paiementsLoaded && !hasNoPayments
+                  ? "Un paiement a déjà été enregistré — les demandes de réduction ne sont plus possibles."
+                  : "Aucune exception disponible"}
+              </p>
             )}
           </div>
         </div>
@@ -663,9 +672,9 @@ export default function ReservationDetailPage() {
                   { label: "Nb mensualités", value: String(reservation.nb_mensualites), icon: CreditCard },
                 ] : []),
               ].map((item) => (
-                <div key={item.label} className={`rounded-xl p-3 ${item.highlight ? "bg-[#c8956c]/10" : "bg-stone-50"}`}>
+                <div key={item.label} className={`rounded-xl p-3 ${item.highlight ? "bg-[#c9773f]/10" : "bg-stone-50"}`}>
                   <p className="text-[10px] text-[#aaaaaa] mb-0.5">{item.label}</p>
-                  <p className={`text-sm font-semibold ${item.highlight ? "text-[#c8956c]" : "text-[#1a1a1a]"}`}>
+                  <p className={`text-sm font-semibold ${item.highlight ? "text-[#c9773f]" : "text-[#1a1a1a]"}`}>
                     {item.value}
                   </p>
                   {"sub" in item && item.sub && (
@@ -731,7 +740,7 @@ export default function ReservationDetailPage() {
                 </div>
                 <div className="flex justify-between pt-2 border-t border-[#e8e6e1]">
                   <span className="text-sm font-bold text-[#1a1a1a]">Reste à payer</span>
-                  <span className={`text-sm font-bold ${soldeComplet ? "text-emerald-600" : "text-[#c8956c]"}`}>
+                  <span className={`text-sm font-bold ${soldeComplet ? "text-emerald-600" : "text-[#c9773f]"}`}>
                     {formatMAD(resteAPayerVal)}
                   </span>
                 </div>

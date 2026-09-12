@@ -197,7 +197,7 @@ export default function DossierNotairePage() {
                 <button
                   onClick={advance}
                   disabled={busy}
-                  className="w-full flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[#c8956c] to-[#a67c52] px-4 py-2.5 text-sm font-semibold text-white transition-all hover:opacity-90 disabled:opacity-50"
+                  className="w-full flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[#c9773f] to-[#9c5a2e] px-4 py-2.5 text-sm font-semibold text-white transition-all hover:opacity-90 disabled:opacity-50"
                 >
                   {NEXT_LABEL[dossier.statut]}
                   <ArrowRight className="h-4 w-4" />
@@ -250,11 +250,11 @@ export default function DossierNotairePage() {
             <div className="rounded-2xl border border-[#e8e6e1] bg-white p-5">
               <h3 className="text-sm font-semibold text-[#888888] mb-3">Client</h3>
               <Link href={`/clients/${dossier.client.id}`} className="flex items-center gap-3 group">
-                <div className="h-10 w-10 rounded-full bg-gradient-to-br from-[#c8956c] to-[#a67c52] flex items-center justify-center text-white text-sm font-bold">
+                <div className="h-10 w-10 rounded-full bg-gradient-to-br from-[#c9773f] to-[#9c5a2e] flex items-center justify-center text-white text-sm font-bold">
                   {getInitials(dossier.client.prenom, dossier.client.nom)}
                 </div>
                 <div>
-                  <p className="font-semibold text-[#1a1a1a] group-hover:text-[#c8956c] transition-colors">
+                  <p className="font-semibold text-[#1a1a1a] group-hover:text-[#c9773f] transition-colors">
                     {dossier.client.prenom} {dossier.client.nom}
                   </p>
                   <p className="text-xs font-mono text-[#888888]">{dossier.client.cin}</p>
@@ -273,7 +273,7 @@ export default function DossierNotairePage() {
             <p className="text-xs text-[#aaaaaa] mb-3">Cliquez sur un document pour le marquer comme reçu.</p>
             <div className="h-2 rounded-full bg-stone-100 overflow-hidden mb-5">
               <div
-                className="h-full rounded-full bg-gradient-to-r from-[#c8956c] to-[#a67c52] transition-all"
+                className="h-full rounded-full bg-gradient-to-r from-[#c9773f] to-[#9c5a2e] transition-all"
                 style={{ width: docsTotal ? `${Math.round((docsFournis / docsTotal) * 100)}%` : "0%" }}
               />
             </div>
@@ -357,7 +357,7 @@ export default function DossierNotairePage() {
               ))}
               <div className="flex justify-between items-center pt-2">
                 <span className="text-sm font-bold text-[#1a1a1a]">Total frais (6.5%)</span>
-                <span className="text-base font-bold text-[#c8956c]">{formatMAD(totalFrais)}</span>
+                <span className="text-base font-bold text-[#c9773f]">{formatMAD(totalFrais)}</span>
               </div>
               {dossier.mode_paiement && (
                 <p className="text-xs text-[#888888] pt-1">Mode de paiement : {dossier.mode_paiement}</p>
@@ -496,7 +496,7 @@ function DossierEditDialog({
                 <button
                   type="button"
                   onClick={autoCalc}
-                  className="flex items-center gap-1 text-[11px] font-semibold text-[#c8956c] hover:underline"
+                  className="flex items-center gap-1 text-[11px] font-semibold text-[#c9773f] hover:underline"
                 >
                   <Sparkles className="h-3 w-3" />
                   Calculer 6,5 % de {formatMAD(prix)}

@@ -102,7 +102,7 @@ export default function ImmeubleUnites() {
             {perms.canEditProject && (
               <button
                 onClick={() => setEditImmeubleOpen(true)}
-                className="rounded-lg border border-[#e8e6e1] p-1.5 text-[#aaaaaa] hover:text-[#1a1a1a] hover:border-[#c8956c]/40 transition-colors"
+                className="rounded-lg border border-[#e8e6e1] p-1.5 text-[#aaaaaa] hover:text-[#1a1a1a] hover:border-[#c9773f]/40 transition-colors"
                 title="Modifier l'immeuble"
               >
                 <Pencil className="h-3.5 w-3.5" />
@@ -115,7 +115,7 @@ export default function ImmeubleUnites() {
           {perms.canCreateUnite ? (
             <button
               onClick={() => setUniteDialogOpen(true)}
-              className="flex items-center gap-1.5 rounded-lg bg-[#c8956c] px-3 py-2 text-xs font-semibold text-white hover:bg-[#a67c52] transition-colors"
+              className="flex items-center gap-1.5 rounded-lg bg-[#c9773f] px-3 py-2 text-xs font-semibold text-white hover:bg-[#9c5a2e] transition-colors"
             >
               <Plus className="h-3.5 w-3.5" />
               Nouvelle Unité
@@ -169,7 +169,7 @@ export default function ImmeubleUnites() {
                           <p className="text-xs text-[#888888]">{unite.type} · {unite.surface}m²</p>
                           <p className="text-xs font-semibold text-[#1a1a1a] mt-1">{formatMAD(unite.prix)}</p>
                           {hasReservation(unite) && (
-                            <p className="text-[10px] text-[#c8956c] mt-1">Client assigné</p>
+                            <p className="text-[10px] text-[#c9773f] mt-1">Client assigné</p>
                           )}
                         </div>
                       </div>
@@ -197,7 +197,7 @@ export default function ImmeubleUnites() {
               {filtered.map((unite) => (
                 <tr key={unite.id} className="hover:bg-stone-50 transition-colors">
                   <td className="px-4 py-3">
-                    <Link href={`/projets/${projetId}/${ghId}/${immeubleId}/${unite.id}`} className="font-mono font-medium text-[#1a1a1a] hover:text-[#c8956c]">
+                    <Link href={`/projets/${projetId}/${ghId}/${immeubleId}/${unite.id}`} className="font-mono font-medium text-[#1a1a1a] hover:text-[#c9773f]">
                       {unite.numero}
                     </Link>
                   </td>
